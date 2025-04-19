@@ -1,0 +1,85 @@
+package com.example.matrix_calculator
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.matrix_calculator.ui.theme.Matrix_calculatorTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        System.loadLibrary("matrixlib")
+        setContent{
+            MatrixCalculatorUI()
+
+        }
+    }
+}
+
+@Composable
+fun MatrixCalculatorUI(){
+
+    var dimension by remember { mutableStateOf("") }
+    var matrixA by remember { mutableStateOf("") }
+    var matrixB by remember { mutableStateOf("") }
+    var result by remember { mutableStateOf("") }
+    var selectedOp by remember { mutableStateOf("Add") }
+
+    Column(
+        modifier = Modifier.padding(16.dp))
+        {
+            Text("Matrix Calculator", fontSize = 22.sp)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = dimension,
+                onValueChange = { dimension = it},
+                label = { Text("Matrix Dimension n") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = matrixA,
+                onValueChange = { matrixA = it},
+                label = { Text("Matrix A, comma seperated") }
+            )
+
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = matrixB,
+                onValueChange = { matrixB = it},
+                label = { Text("Matrix B, comma seperated") }
+            )
+
+
+
+        }
+
+
+
+}
