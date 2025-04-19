@@ -5,11 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -75,6 +77,30 @@ fun MatrixCalculatorUI(){
                 onValueChange = { matrixB = it},
                 label = { Text("Matrix B, comma seperated") }
             )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row {
+                listOf("Add", "Subtract", "Multiply" , "Divide").forEach{
+                    Button(
+                        onClick = {selectedOp = it},
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(it)
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(onClick = {
+                // call native function
+
+            }) {
+                Text("Calculate")
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+            Text("Result: $result")
 
 
 
