@@ -31,10 +31,9 @@ import com.example.matrix_calculator.ui.theme.Matrix_calculatorTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        System.loadLibrary("matrixlib")
+        System.loadLibrary("matrix_calculator")
         setContent{
             MatrixCalculatorUI()
-
         }
     }
 }
@@ -47,6 +46,7 @@ fun MatrixCalculatorUI(){
     var matrixB by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
     var selectedOp by remember { mutableStateOf("Add") }
+    var errorMessage by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.padding(16.dp))
@@ -93,8 +93,29 @@ fun MatrixCalculatorUI(){
             Spacer(modifier = Modifier.height(12.dp))
 
             Button(onClick = {
-                // call native function
+                errorMessage = ""
+                val dim = dimension.toIntOrNull();
+                if(dim == null || dim <= 0){
+                    errorMessage = "Incorrect Dimensions";
+                    return@Button
+                }
+                val matrixAList = matrixA.split(",")
+                val matrixBList = matrixB.split(",")
 
+                if(matrixAList.size != dim*dim || matrixBList.size != dim*dim ){
+                    errorMessage = "Matrix dimension are incorrect"
+                    return@Button
+                }
+
+                val invalidA = matrixAList.any { it.trim().toDoubleOrNull() == null }
+                val invalidB = matrixBList.any { it.trim().toDoubleOrNull() == null }
+
+                if (invalidA || invalidB) {
+                    errorMessage = "Matrix entries must be valid numbers."
+                    return@Button
+                }
+
+                result = performMatrixOperation(matrixA, matrixB, dimension.toInt(), selectedOp)
             }) {
                 Text("Calculate")
             }
@@ -102,10 +123,14 @@ fun MatrixCalculatorUI(){
             Spacer(modifier = Modifier.height(12.dp))
             Text("Result: $result")
 
-
+            if(errorMessage.isNotEmpty()){
+                Text(text = errorMessage)
+            }
 
         }
-
-
-
 }
+
+external fun performMatrixOperation(a: String, b: String, dim: Int, op: String): String
+
+
+
